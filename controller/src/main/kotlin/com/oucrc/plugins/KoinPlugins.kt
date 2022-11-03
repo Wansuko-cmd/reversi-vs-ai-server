@@ -7,9 +7,9 @@ import org.jetbrains.exposed.sql.Database
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
 import player.AiRepository
-import player.ai.GetAisUseCase
 import player.UserRepository
 import player.ai.CreateAiUseCase
+import player.ai.GetAisUseCase
 import player.user.CreateUserUseCase
 import player.user.GetUsersUseCase
 import repository.AiRepositoryImpl
