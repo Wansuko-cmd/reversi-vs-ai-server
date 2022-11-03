@@ -9,7 +9,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import org.koin.ktor.ext.inject
-import user.GetUsersUseCase
+import player.user.GetUsersUseCase
 
 fun Route.usersIndexGet(path: String) {
     val getUsersUseCase by inject<GetUsersUseCase>()

@@ -10,6 +10,7 @@ import player.AiRepository
 import player.ai.GetAisUseCase
 import player.UserRepository
 import player.ai.CreateAiUseCase
+import player.user.GetUsersUseCase
 import repository.AiRepositoryImpl
 import repository.RoomRepositoryImpl
 import repository.UserRepositoryImpl
@@ -31,6 +32,9 @@ fun Application.koinPlugins() {
         // Ai
         single<CreateAiUseCase> { CreateAiUseCase(get()) }
         single<GetAisUseCase> { GetAisUseCase(get()) }
+
+        // User
+        single<GetUsersUseCase> { GetUsersUseCase(get()) }
 
         /*** Repository ***/
         single<RoomRepository> { RoomRepositoryImpl(get()) }
