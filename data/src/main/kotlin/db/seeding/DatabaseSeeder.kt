@@ -6,6 +6,6 @@ interface DatabaseSeeder {
     fun seeding(database: Database)
 }
 
-val seeding = listOf(UserDatabaseSeeder, RoomDatabaseSeeder)
+val seeding = listOf(PlayerDatabaseSeeder, RoomDatabaseSeeder)
 
 fun Database.seeding() = seeding.forEach { it.seeding(database = this) }

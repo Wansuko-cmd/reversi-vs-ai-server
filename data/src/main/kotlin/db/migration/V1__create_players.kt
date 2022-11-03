@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import table.PlayerModel
 
 @Suppress("ClassName", "unused")
-class V1__create_users : BaseJavaMigration() {
+class V1__create_players : BaseJavaMigration() {
     override fun migrate(context: Context?) {
         transaction { SchemaUtils.create(PlayerModel) }
     }
