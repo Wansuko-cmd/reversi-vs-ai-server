@@ -14,9 +14,9 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 import kotlinx.serialization.SerialName
 import org.koin.ktor.ext.inject
+import player.PlayerId
 import room.PlacePieceInRoomUseCase
 import room.RoomId
-import user.UserId
 
 fun Route.roomsShowPost(path: String, param: String) {
     val placePieceInRoomUseCase by inject<PlacePieceInRoomUseCase>()
@@ -24,8 +24,13 @@ fun Route.roomsShowPost(path: String, param: String) {
         call.getParameter<String>(param, errorMessage = "Invalid room id.")
             .flatMap { id ->
                 call.getRequest<RoomShowPostRequest>(errorMessage = "Invalid request.")
-                    .map { (userId, row, column) ->
-                        placePieceInRoomUseCase(RoomId(id), row, column, UserId(userId))
+                    .map { request ->
+                        placePieceInRoomUseCase(
+                            RoomId(id),
+                            request.row,
+                            request.column,
+                            if(request.isUser) PlayerId.UserId(request.userId) else PlayerId.AiId(request.userId)
+                        )
                     }
             }
             .mapFailure { ExceptionSerializable.from(it) }
@@ -39,6 +44,7 @@ fun Route.roomsShowPost(path: String, param: String) {
 @kotlinx.serialization.Serializable
 data class RoomShowPostRequest(
     @SerialName("user_id") val userId: String,
+    @SerialName("is_user") val isUser: Boolean = false,
     val row: Int,
     val column: Int,
 )

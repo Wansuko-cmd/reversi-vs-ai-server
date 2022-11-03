@@ -18,6 +18,11 @@ sealed interface Routing {
             const val path = "{$userId}"
         }
     }
+
+    object Ai : Routing {
+        const val path = "ai"
+        object Index { const val path = "" }
+    }
 }
 
 /**

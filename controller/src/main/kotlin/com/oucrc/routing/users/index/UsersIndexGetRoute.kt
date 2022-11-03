@@ -1,7 +1,7 @@
 package com.oucrc.routing.users.index
 
 import com.oucrc.serializable.ExceptionSerializable
-import com.oucrc.serializable.UserSerializable
+import com.oucrc.serializable.PlayerSerializable
 import com.wsr.result.consume
 import com.wsr.result.mapBoth
 import io.ktor.server.application.call
@@ -17,7 +17,7 @@ fun Route.usersIndexGet(path: String) {
     get(path) {
         getUsersUseCase()
             .mapBoth(
-                success = { users -> users.map { UserSerializable.from(it) } },
+                success = { users -> users.map { PlayerSerializable.from(it) } },
                 failure = { ExceptionSerializable.from(it) }
             )
             .consume(

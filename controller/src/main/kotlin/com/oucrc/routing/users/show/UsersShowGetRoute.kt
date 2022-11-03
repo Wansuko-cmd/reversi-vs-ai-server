@@ -2,7 +2,7 @@ package com.oucrc.routing.users.show
 
 import com.oucrc.ext.getParameter
 import com.oucrc.serializable.ExceptionSerializable
-import com.oucrc.serializable.UserSerializable
+import com.oucrc.serializable.PlayerSerializable
 import com.wsr.result.consume
 import com.wsr.result.flatMap
 import com.wsr.result.mapBoth
@@ -21,7 +21,7 @@ fun Route.usersShowGet(path: String, param: String) {
         call.getParameter<String>(param)
             .flatMap { id -> getUserByIdUseCase(UserId(id)) }
             .mapBoth(
-                success = { user -> UserSerializable.from(user) },
+                success = { user -> PlayerSerializable.from(user) },
                 failure = { ExceptionSerializable.from(it) },
             )
             .consume(

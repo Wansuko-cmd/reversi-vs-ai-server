@@ -1,5 +1,6 @@
 package com.oucrc.routing
 
+import com.oucrc.routing.ai.index.aisIndexGet
 import com.oucrc.routing.rooms.index.roomsIndexGet
 import com.oucrc.routing.rooms.show.roomsShowGet
 import com.oucrc.routing.rooms.show.roomsShowPost
@@ -25,6 +26,9 @@ fun Application.mainRoute() {
                 path = Routing.Room.Show.path,
                 param = Routing.Room.Show.roomId
             )
+        }
+        route(Routing.Ai.path) {
+            aisIndexGet(Routing.Ai.Index.path)
         }
         route(Routing.User.path) {
             usersIndexGet(path = Routing.User.Index.path)
