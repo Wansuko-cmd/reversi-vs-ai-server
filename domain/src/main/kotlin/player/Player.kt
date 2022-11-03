@@ -2,9 +2,12 @@ package player
 
 sealed interface Player {
     val id: PlayerId
-    class Ai(override val id: PlayerId) : Player
-    class User(override val id: PlayerId) : Player
+    class Ai(override val id: PlayerId.AiId) : Player
+    class User(override val id: PlayerId.UserId) : Player
 }
 
-@JvmInline
-value class PlayerId(val value: String)
+sealed interface PlayerId {
+    val value: String
+    class AiId(override val value: String) : PlayerId
+    class UserId(override val value: String) : PlayerId
+}
