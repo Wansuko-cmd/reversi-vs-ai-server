@@ -7,22 +7,22 @@ import com.wsr.result.mapBoth
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
+import io.ktor.server.routing.post
 import org.koin.ktor.ext.inject
-import player.ai.GetAisUseCase
+import player.ai.CreateAiUseCase
 
-fun Route.aisIndexGet(path: String) {
-    val getAisUseCase by inject<GetAisUseCase>()
+fun Route.aisIndexPost(path: String) {
+    val createAiUseCase by inject<CreateAiUseCase>()
 
-    get(path) {
-        getAisUseCase()
+    post(path) {
+        createAiUseCase()
             .mapBoth(
-                success = { ais -> ais.map { PlayerSerializable.from(it) } },
+                success = { ai -> PlayerSerializable.from(ai) },
                 failure = { ExceptionSerializable.from(it) },
             )
             .consume(
-                success = { ais -> call.respond(ais) },
-                failure = { (message, status) -> call.respond(status, message) },
+                success = { ai -> call.respond(ai) },
+                failure = { (message, status) -> call.respond(status, message) }
             )
     }
 }

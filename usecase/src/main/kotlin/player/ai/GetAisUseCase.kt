@@ -1,4 +1,4 @@
-package player
+package player.ai
 
 import DomainException
 import com.wsr.result.ApiResult
@@ -6,6 +6,8 @@ import com.wsr.result.map
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import player.AiRepository
+import player.PlayerUseCaseModel
 
 class GetAisUseCase(
     private val aiRepository: AiRepository,

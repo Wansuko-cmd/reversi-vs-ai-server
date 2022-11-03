@@ -7,8 +7,9 @@ import org.jetbrains.exposed.sql.Database
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
 import player.AiRepository
-import player.GetAisUseCase
+import player.ai.GetAisUseCase
 import player.UserRepository
+import player.ai.CreateAiUseCase
 import repository.AiRepositoryImpl
 import repository.RoomRepositoryImpl
 import repository.UserRepositoryImpl
@@ -28,6 +29,7 @@ fun Application.koinPlugins() {
         single<PlacePieceInRoomUseCase> { PlacePieceInRoomUseCase(get()) }
 
         // Ai
+        single<CreateAiUseCase> { CreateAiUseCase(get()) }
         single<GetAisUseCase> { GetAisUseCase(get()) }
 
         /*** Repository ***/

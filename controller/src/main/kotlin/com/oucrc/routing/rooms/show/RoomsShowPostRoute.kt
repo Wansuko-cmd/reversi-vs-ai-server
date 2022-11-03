@@ -29,7 +29,7 @@ fun Route.roomsShowPost(path: String, param: String) {
                             RoomId(id),
                             request.row,
                             request.column,
-                            if(request.isUser) PlayerId.UserId(request.userId) else PlayerId.AiId(request.userId)
+                            if (request.isUser) PlayerId.UserId(request.userId) else PlayerId.AiId(request.userId)
                         )
                     }
             }
