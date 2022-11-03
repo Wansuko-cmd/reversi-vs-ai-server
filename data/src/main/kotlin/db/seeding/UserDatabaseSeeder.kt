@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.transactions.transaction
 import room.RoomId
-import table.UserModel
+import table.PlayerModel
 import user.User
 import user.UserId
 import user.UserName
@@ -13,9 +13,9 @@ import user.UserStatus
 object UserDatabaseSeeder : DatabaseSeeder {
     override fun seeding(database: Database) {
         transaction(database) {
-            UserModel.batchInsert(userData) {
-                this[UserModel.id] = it.id.value
-                this[UserModel.name] = it.name.value
+            PlayerModel.batchInsert(userData) {
+                this[PlayerModel.id] = it.id.value
+                this[PlayerModel.name] = it.name.value
             }
         }
     }

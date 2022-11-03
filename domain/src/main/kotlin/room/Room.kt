@@ -55,8 +55,8 @@ class Room private constructor(
                 id = RoomId(UUID.randomUUID().toString()),
                 black = black,
                 white = white,
-                next = Cell.Piece.Black,
                 board = Board.create(8),
+                next = Cell.Piece.Black,
             )
         }
 
@@ -64,6 +64,20 @@ class Room private constructor(
             (0..1)
                 .random()
                 .let { if (it == 0) first to second else second to first }
+
+        fun reconstruct(
+            id: RoomId,
+            black: Player,
+            white: Player,
+            board: Board,
+            next: Cell.Piece?,
+        ) = Room(
+            id = id,
+            black = black,
+            white = white,
+            next = next,
+            board = board,
+        )
     }
 }
 

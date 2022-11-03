@@ -15,8 +15,8 @@ import org.jetbrains.exposed.sql.update
 import room.Room
 import room.RoomId
 import room.RoomRepository
+import table.PlayerModel
 import table.RoomModel
-import table.UserModel
 
 class RoomRepositoryImpl(
     private val database: Database,
@@ -65,8 +65,14 @@ class RoomRepositoryImpl(
 
 private fun ResultRow.toRoom(db: Database) = Room.reconstruct(
     id = RoomId(this[RoomModel.id]),
-    black = transaction(db) { UserModel.select { UserModel.id eq this@toRoom[RoomModel.black] } }.first().toUser(),
-    white = transaction(db) { UserModel.select { UserModel.id eq this@toRoom[RoomModel.white] } }.first().toUser(),
+    black = transaction(db) { PlayerModel.select { PlayerModel.id eq this@toRoom[RoomModel.black] } }
+        .first()
+        .toPlayer(),
+    white = transaction(db) { PlayerModel.select { PlayerModel.id eq this@toRoom[RoomModel.white] } }
+        .first()
+        .toPlayer(),
     next = this[RoomModel.next]?.let(Cell.Piece::from),
     board = this[RoomModel.board],
 )
+
+private fun ResultRow.toPlayer() = if (this[PlayerModel.isAi]) this.toAi() else this.toUser()
