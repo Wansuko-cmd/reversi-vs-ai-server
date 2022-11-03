@@ -3,20 +3,20 @@ package room
 import Board
 import DomainException
 import com.wsr.result.ApiResult
-import user.User
-import user.UserId
+import player.Player
+import player.PlayerId
 import java.util.UUID
 
 class Room private constructor(
     val id: RoomId,
-    val black: User,
-    val white: User,
+    val black: Player,
+    val white: Player,
     val board: Board,
     val next: Cell.Piece?,
 ) {
-    fun isNextUser(userId: UserId): Boolean = when (next) {
-        is Cell.Piece.Black -> userId == black.id
-        is Cell.Piece.White -> userId == white.id
+    fun isNextUser(playerId: PlayerId): Boolean = when (next) {
+        is Cell.Piece.Black -> playerId == black.id
+        is Cell.Piece.White -> playerId == white.id
         else -> false
     }
 
@@ -49,27 +49,21 @@ class Room private constructor(
     }
 
     companion object {
-        fun create(black: User, white: User) = Room(
-            id = RoomId(UUID.randomUUID().toString()),
-            black = black,
-            white = white,
-            next = Cell.Piece.Black,
-            board = Board.create(20),
-        )
+        fun create(ai: Player.Ai, user: Player.User): Room {
+            val (black, white) = (ai to user).randomSwap()
+            return Room(
+                id = RoomId(UUID.randomUUID().toString()),
+                black = black,
+                white = white,
+                next = Cell.Piece.Black,
+                board = Board.create(8),
+            )
+        }
 
-        fun reconstruct(
-            id: RoomId,
-            black: User,
-            white: User,
-            next: Cell.Piece?,
-            board: Board
-        ) = Room(
-            id = id,
-            black = black,
-            white = white,
-            next = next,
-            board = board,
-        )
+        private fun <T> Pair<T, T>.randomSwap() =
+            (0..1)
+                .random()
+                .let { if (it == 0) first to second else second to first }
     }
 }
 
