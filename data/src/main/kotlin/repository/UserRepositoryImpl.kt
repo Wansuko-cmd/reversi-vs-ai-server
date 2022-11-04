@@ -14,6 +14,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.update
 import player.Player
 import player.PlayerId
+import player.PlayerName
 import player.PlayerStatus
 import player.UserRepository
 import room.RoomId
@@ -44,6 +45,7 @@ class UserRepositoryImpl(
             PlayerModel
                 .insert {
                     it[id] = user.id.value
+                    it[name] = user.name.value
                     it[isAi] = false
                     it[playerStatus] = when (user.status) {
                         is PlayerStatus.OnMatch -> (user.status as PlayerStatus.OnMatch).roomId.value
@@ -59,6 +61,7 @@ class UserRepositoryImpl(
                     where = { (PlayerModel.id eq user.id.value) and (PlayerModel.isAi eq false) },
                     limit = 1,
                 ) {
+                    it[name] = user.name.value
                     it[playerStatus] = when (user.status) {
                         is PlayerStatus.OnMatch -> (user.status as PlayerStatus.OnMatch).roomId.value
                         is PlayerStatus.WaitMatting -> null
@@ -69,6 +72,7 @@ class UserRepositoryImpl(
 
 fun ResultRow.toUser() = Player.User.reconstruct(
     id = PlayerId.UserId(this[PlayerModel.id]),
+    name = PlayerName.UserName(this[PlayerModel.name]),
     status = this[PlayerModel.playerStatus]
         ?.let { PlayerStatus.OnMatch(RoomId(it)) }
         ?: PlayerStatus.WaitMatting,

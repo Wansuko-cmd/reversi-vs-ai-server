@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.transactions.transaction
 import player.Player
 import player.PlayerId
+import player.PlayerName
 import player.PlayerStatus
 import table.PlayerModel
 
@@ -13,10 +14,12 @@ object PlayerDatabaseSeeder : DatabaseSeeder {
         transaction(database) {
             PlayerModel.batchInsert(userData) {
                 this[PlayerModel.id] = it.id.value
+                this[PlayerModel.name] = it.name.value
                 this[PlayerModel.isAi] = false
             }
             PlayerModel.batchInsert(aiData) {
                 this[PlayerModel.id] = it.id.value
+                this[PlayerModel.name] = it.name.value
                 this[PlayerModel.isAi] = true
             }
         }
@@ -25,6 +28,7 @@ object PlayerDatabaseSeeder : DatabaseSeeder {
     private val userData = List(5) { index ->
         Player.User.reconstruct(
             id = PlayerId.UserId("UserId$index"),
+            name = PlayerName.UserName("UserName$index"),
             status = PlayerStatus.WaitMatting,
         )
     }
@@ -32,6 +36,7 @@ object PlayerDatabaseSeeder : DatabaseSeeder {
     private val aiData = List(5) { index ->
         Player.Ai.reconstruct(
             id = PlayerId.AiId("AiId$index"),
+            name = PlayerName.AiName("AiNameName$index"),
             status = PlayerStatus.WaitMatting,
         )
     }

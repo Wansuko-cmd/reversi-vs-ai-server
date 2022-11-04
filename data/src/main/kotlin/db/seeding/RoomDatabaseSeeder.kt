@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.transactions.transaction
 import player.Player
 import player.PlayerId
+import player.PlayerName
 import player.PlayerStatus
 import room.Room
 import room.RoomId
@@ -28,10 +29,12 @@ object RoomDatabaseSeeder : DatabaseSeeder {
             id = RoomId("RoomId$index"),
             black = Player.User.reconstruct(
                 id = PlayerId.UserId("UserId$index"),
+                name = PlayerName.UserName("UserName$index"),
                 status = PlayerStatus.WaitMatting,
             ),
             white = Player.Ai.reconstruct(
                 id = PlayerId.AiId("UserId$index"),
+                name = PlayerName.AiName("UserName$index"),
                 status = PlayerStatus.WaitMatting,
             ),
             next = Cell.Piece.Black,

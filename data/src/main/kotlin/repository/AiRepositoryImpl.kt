@@ -6,7 +6,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.insert
@@ -15,6 +14,7 @@ import org.jetbrains.exposed.sql.update
 import player.AiRepository
 import player.Player
 import player.PlayerId
+import player.PlayerName
 import player.PlayerStatus
 import room.RoomId
 import table.PlayerModel
@@ -44,6 +44,7 @@ class AiRepositoryImpl(
             PlayerModel
                 .insert {
                     it[id] = ai.id.value
+                    it[name] = ai.name.value
                     it[isAi] = true
                     it[playerStatus] = when (ai.status) {
                         is PlayerStatus.OnMatch -> (ai.status as PlayerStatus.OnMatch).roomId.value
@@ -52,15 +53,16 @@ class AiRepositoryImpl(
                 }
         }
 
-    override suspend fun update(user: Player.Ai): ApiResult<Unit, DomainException> =
+    override suspend fun update(ai: Player.Ai): ApiResult<Unit, DomainException> =
         runCatchWithTransaction(database, dispatcher) {
             PlayerModel
                 .update(
-                    where = { (PlayerModel.id eq user.id.value) and (PlayerModel.isAi eq true) },
+                    where = { (PlayerModel.id eq ai.id.value) and (PlayerModel.isAi eq true) },
                     limit = 1,
                 ) {
-                    it[playerStatus] = when (user.status) {
-                        is PlayerStatus.OnMatch -> (user.status as PlayerStatus.OnMatch).roomId.value
+                    it[name] = ai.name.value
+                    it[playerStatus] = when (ai.status) {
+                        is PlayerStatus.OnMatch -> (ai.status as PlayerStatus.OnMatch).roomId.value
                         is PlayerStatus.WaitMatting -> null
                     }
                 }
@@ -69,6 +71,7 @@ class AiRepositoryImpl(
 
 fun ResultRow.toAi() = Player.Ai.reconstruct(
     id = PlayerId.AiId(this[PlayerModel.id]),
+    name = PlayerName.AiName(this[PlayerModel.name]),
     status = this[PlayerModel.playerStatus]
         ?.let { PlayerStatus.OnMatch(RoomId(it)) }
         ?: PlayerStatus.WaitMatting,
