@@ -20,7 +20,7 @@ class CreateRoomUseCase(
     suspend operator fun invoke(
         aiId: PlayerId.AiId,
         userId: PlayerId.UserId,
-    ): ApiResult<Unit, DomainException> =
+    ): ApiResult<RoomUseCaseModel, DomainException> =
         withContext(dispatcher) {
             (aiRepository.getById(aiId) to userRepository.getById(userId))
                 .let { (aiResult, userResult) ->
@@ -28,6 +28,6 @@ class CreateRoomUseCase(
                         userResult.map { user -> Room.create(ai = ai, user = user) }
                     }
                 }
-                .flatMap { room -> roomRepository.insert(room) }
+                .flatMap { room -> roomRepository.insert(room).map { RoomUseCaseModel.from(room) } }
         }
 }

@@ -2,8 +2,10 @@ package com.oucrc.routing.rooms.index
 
 import com.oucrc.ext.getRequest
 import com.oucrc.serializable.ExceptionSerializable
+import com.oucrc.serializable.RoomSerializable
 import com.wsr.result.consume
 import com.wsr.result.flatMap
+import com.wsr.result.mapBoth
 import com.wsr.result.mapFailure
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
@@ -23,7 +25,10 @@ fun Route.roomsIndexPost(path: String) {
             .flatMap { (aiId, userId,) ->
                 createRoomUseCase(aiId = PlayerId.AiId(aiId), userId = PlayerId.UserId(userId))
             }
-            .mapFailure { ExceptionSerializable.from(it) }
+            .mapBoth(
+                success = { room -> RoomSerializable.from(room) },
+                failure = { ExceptionSerializable.from(it) },
+            )
             .consume(
                 success = { room -> call.respond(room) },
                 failure = { (message, status) -> call.respond(status, message) }
