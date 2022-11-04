@@ -6,7 +6,6 @@ import com.oucrc.serializable.RoomSerializable
 import com.wsr.result.consume
 import com.wsr.result.flatMap
 import com.wsr.result.mapBoth
-import com.wsr.result.mapFailure
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route

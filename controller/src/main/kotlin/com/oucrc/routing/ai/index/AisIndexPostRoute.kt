@@ -1,7 +1,6 @@
 package com.oucrc.routing.ai.index
 
 import com.oucrc.ext.getRequest
-import com.oucrc.routing.users.index.UsersIndexPostRequest
 import com.oucrc.serializable.ExceptionSerializable
 import com.oucrc.serializable.PlayerSerializable
 import com.wsr.result.consume

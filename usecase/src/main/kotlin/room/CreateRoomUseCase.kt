@@ -33,7 +33,6 @@ class CreateRoomUseCase(
                 .flatMap { room -> roomRepository.insert(room).map { room } }
                 .updateUsers()
                 .map { RoomUseCaseModel.from(it) }
-
         }
 
     private suspend fun ApiResult<Room, DomainException>.updateUsers(): ApiResult<Room, DomainException> =
