@@ -30,7 +30,7 @@ fun Application.koinPlugins() {
         single<CreateRoomUseCase> { CreateRoomUseCase(get(), get(), get()) }
         single<GetRoomsUseCase> { GetRoomsUseCase(get()) }
         single<GetRoomByIdUseCase> { GetRoomByIdUseCase(get()) }
-        single<PlacePieceInRoomUseCase> { PlacePieceInRoomUseCase(get()) }
+        single<PlacePieceInRoomUseCase> { PlacePieceInRoomUseCase(get(), get(), get()) }
 
         // Ai
         single<CreateAiUseCase> { CreateAiUseCase(get()) }
