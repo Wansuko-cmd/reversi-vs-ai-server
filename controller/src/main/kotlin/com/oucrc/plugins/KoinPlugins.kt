@@ -9,8 +9,10 @@ import org.koin.ktor.plugin.Koin
 import player.AiRepository
 import player.UserRepository
 import player.ai.CreateAiUseCase
+import player.ai.GetAiByIdUseCase
 import player.ai.GetAisUseCase
 import player.user.CreateUserUseCase
+import player.user.GetUserByIdUseCase
 import player.user.GetUsersUseCase
 import repository.AiRepositoryImpl
 import repository.RoomRepositoryImpl
@@ -33,10 +35,12 @@ fun Application.koinPlugins() {
         // Ai
         single<CreateAiUseCase> { CreateAiUseCase(get()) }
         single<GetAisUseCase> { GetAisUseCase(get()) }
+        single<GetAiByIdUseCase> { GetAiByIdUseCase(get()) }
 
         // User
         single<CreateUserUseCase> { CreateUserUseCase(get()) }
         single<GetUsersUseCase> { GetUsersUseCase(get()) }
+        single<GetUserByIdUseCase> { GetUserByIdUseCase(get()) }
 
         /*** Repository ***/
         single<RoomRepository> { RoomRepositoryImpl(get()) }
