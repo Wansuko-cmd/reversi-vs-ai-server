@@ -7,4 +7,5 @@ interface UserRepository {
     suspend fun getAll(): ApiResult<List<Player.User>, DomainException>
     suspend fun getById(id: PlayerId.UserId): ApiResult<Player.User, DomainException>
     suspend fun insert(user: Player.User): ApiResult<Unit, DomainException>
+    suspend fun update(user: Player.User): ApiResult<Unit, DomainException>
 }

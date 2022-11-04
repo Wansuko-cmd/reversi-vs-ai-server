@@ -8,7 +8,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import player.AiRepository
+import player.Player
 import player.PlayerId
+import player.PlayerStatus
 import player.UserRepository
 
 class CreateRoomUseCase(
@@ -28,6 +30,21 @@ class CreateRoomUseCase(
                         userResult.map { user -> Room.create(ai = ai, user = user) }
                     }
                 }
-                .flatMap { room -> roomRepository.insert(room).map { RoomUseCaseModel.from(room) } }
+                .flatMap { room -> roomRepository.insert(room).map { room } }
+                .updateUsers()
+                .map { RoomUseCaseModel.from(it) }
+
         }
+
+    private suspend fun ApiResult<Room, DomainException>.updateUsers(): ApiResult<Room, DomainException> =
+        this.map { room ->
+            updatePlayer(room.black.updateStatus(PlayerStatus.OnMatch(room.id)))
+            updatePlayer(room.white.updateStatus(PlayerStatus.OnMatch(room.id)))
+            room
+        }
+
+    private suspend fun updatePlayer(player: Player) = when (player) {
+        is Player.Ai -> aiRepository.update(player)
+        is Player.User -> userRepository.update(player)
+    }
 }

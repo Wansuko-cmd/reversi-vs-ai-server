@@ -7,12 +7,16 @@ import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.update
 import player.Player
 import player.PlayerId
+import player.PlayerStatus
 import player.UserRepository
+import room.RoomId
 import table.PlayerModel
 
 class UserRepositoryImpl(
@@ -41,10 +45,31 @@ class UserRepositoryImpl(
                 .insert {
                     it[id] = user.id.value
                     it[isAi] = false
+                    it[playerStatus] = when (user.status) {
+                        is PlayerStatus.OnMatch -> (user.status as PlayerStatus.OnMatch).roomId.value
+                        is PlayerStatus.WaitMatting -> null
+                    }
+                }
+        }
+
+    override suspend fun update(user: Player.User): ApiResult<Unit, DomainException> =
+        runCatchWithTransaction(database, dispatcher) {
+            PlayerModel
+                .update(
+                    where = { (PlayerModel.id eq user.id.value) and (PlayerModel.isAi eq false) },
+                    limit = 1,
+                ) {
+                    it[playerStatus] = when (user.status) {
+                        is PlayerStatus.OnMatch -> (user.status as PlayerStatus.OnMatch).roomId.value
+                        is PlayerStatus.WaitMatting -> null
+                    }
                 }
         }
 }
 
 fun ResultRow.toUser() = Player.User.reconstruct(
     id = PlayerId.UserId(this[PlayerModel.id]),
+    status = this[PlayerModel.playerStatus]
+        ?.let { PlayerStatus.OnMatch(RoomId(it)) }
+        ?: PlayerStatus.WaitMatting,
 )

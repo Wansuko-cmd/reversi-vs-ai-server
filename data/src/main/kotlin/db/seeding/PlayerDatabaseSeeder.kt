@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.transactions.transaction
 import player.Player
 import player.PlayerId
+import player.PlayerStatus
 import table.PlayerModel
 
 object PlayerDatabaseSeeder : DatabaseSeeder {
@@ -24,12 +25,14 @@ object PlayerDatabaseSeeder : DatabaseSeeder {
     private val userData = List(5) { index ->
         Player.User.reconstruct(
             id = PlayerId.UserId("UserId$index"),
+            status = PlayerStatus.WaitMatting,
         )
     }
 
     private val aiData = List(5) { index ->
         Player.Ai.reconstruct(
-            id = PlayerId.AiId("AiId$index")
+            id = PlayerId.AiId("AiId$index"),
+            status = PlayerStatus.WaitMatting,
         )
     }
 }

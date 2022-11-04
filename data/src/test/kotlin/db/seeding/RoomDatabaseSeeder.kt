@@ -6,9 +6,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import room.Room
 import room.RoomId
 import table.RoomModel
-import user.User
-import user.UserId
-import user.UserName
 
 object RoomDatabaseSeeder : DatabaseSeeder {
     override fun seeding(database: Database) {
