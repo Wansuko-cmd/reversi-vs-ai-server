@@ -2,12 +2,14 @@ package com.oucrc.routing
 
 import com.oucrc.routing.ai.index.aisIndexGet
 import com.oucrc.routing.ai.index.aisIndexPost
+import com.oucrc.routing.ai.show.aiShowGet
 import com.oucrc.routing.rooms.index.roomsIndexGet
 import com.oucrc.routing.rooms.index.roomsIndexPost
 import com.oucrc.routing.rooms.show.roomsShowGet
 import com.oucrc.routing.rooms.show.roomsShowPost
 import com.oucrc.routing.users.index.usersIndexGet
 import com.oucrc.routing.users.index.usersIndexPost
+import com.oucrc.routing.users.show.usersShowGet
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
@@ -32,10 +34,18 @@ fun Application.mainRoute() {
         route(Routing.Ai.path) {
             aisIndexGet(Routing.Ai.Index.path)
             aisIndexPost(Routing.Ai.Index.path)
+            aiShowGet(
+                path = Routing.Ai.Show.path,
+                param = Routing.Ai.Show.aiId,
+            )
         }
         route(Routing.User.path) {
             usersIndexGet(path = Routing.User.Index.path)
             usersIndexPost(path = Routing.User.Index.path)
+            usersShowGet(
+                path = Routing.User.Show.path,
+                param = Routing.User.Show.userId,
+            )
         }
         get("") { call.respond("Hello World") }
     }

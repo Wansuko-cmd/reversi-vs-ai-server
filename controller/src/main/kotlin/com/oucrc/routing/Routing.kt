@@ -22,6 +22,10 @@ sealed interface Routing {
     object Ai : Routing {
         const val path = "ai"
         object Index { const val path = "" }
+        object Show {
+            const val aiId = "aiId"
+            const val path = "{$aiId}"
+        }
     }
 }
 
