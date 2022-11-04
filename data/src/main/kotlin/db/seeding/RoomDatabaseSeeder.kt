@@ -35,7 +35,7 @@ object RoomDatabaseSeeder : DatabaseSeeder {
                 status = PlayerStatus.WaitMatting,
             ),
             next = Cell.Piece.Black,
-            board = Board.create(20),
+            board = Board.create(8),
         )
     }
 }
