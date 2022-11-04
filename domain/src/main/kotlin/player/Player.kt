@@ -61,14 +61,14 @@ sealed interface Player {
 
 sealed interface PlayerId {
     val value: String
-    class AiId(override val value: String) : PlayerId
-    class UserId(override val value: String) : PlayerId
+    data class AiId(override val value: String) : PlayerId
+    data class UserId(override val value: String) : PlayerId
 }
 
 sealed interface PlayerName {
     val value: String
-    class AiName(override val value: String = "AI") : PlayerName
-    class UserName(override val value: String) : PlayerName
+    data class AiName(override val value: String = "AI") : PlayerName
+    data class UserName(override val value: String) : PlayerName
 }
 
 sealed interface PlayerStatus {

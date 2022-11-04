@@ -22,7 +22,7 @@ class PlacePieceInRoomUseCase(
             .getById(roomId)
             .checkIsNextUser(playerId)
             .flatMap { it.place(row, column) }
-            .flatMap { room -> roomRepository.update(room) }
+            .flatMap { room -> roomRepository.update(room).also { println(room) } }
     }
 
     private fun ApiResult<Room, DomainException>.checkIsNextUser(
